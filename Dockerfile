@@ -30,6 +30,13 @@ RUN echo "[DB2]" > /etc/odbcinst.ini && \
     echo "FileUsage = 1" >> /etc/odbcinst.ini && \
     echo "DontDLClose = 1" >> /etc/odbcinst.ini
 
+# Validate ODBC installation
+RUN echo "Validating ODBC installation..." && \
+    odbcinst -j && \
+    ls -la ${IBM_DB_HOME}/lib/libdb2o.so && \
+    ${IBM_DB_HOME}/bin/db2level && \
+    echo "ODBC installation validated successfully"
+
 # Set working directory
 WORKDIR /app
 
