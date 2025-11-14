@@ -11,8 +11,6 @@ RUN apt-get update && apt-get install -y \
     gnupg2 \
     unixodbc \
     unixodbc-dev \
-    odbcinst \
-    odbcinst1debian2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install IBM DB2 ODBC driver (clidriver v11.5.8)
