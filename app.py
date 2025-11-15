@@ -26,7 +26,7 @@ POOL_RECYCLE = int(os.getenv('DB2_POOL_RECYCLE', '3600'))
 POOL_PRE_PING = os.getenv('DB2_POOL_PRE_PING', 'true').lower() == 'true'
 
 # Create connection string
-connection_string = f"db2+ibm_db://{DB2_USERNAME}:{DB2_PASSWORD}@{DB2_HOST}:{DB2_PORT}/{DB2_DATABASE}?connecttimeout={CONNECTION_TIMEOUT}"
+connection_string = f"db2+ibm_db://{DB2_USERNAME}:{DB2_PASSWORD}@{DB2_HOST}:{DB2_PORT}/{DB2_DATABASE}?connecttimeout={CONNECTION_TIMEOUT}&protocol=TCPIP"
 
 # Create SQLAlchemy engine
 engine = create_engine(
