@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  python-db2-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: python-db2-odbc:latest
+    container_name: python-db2-odbc
+    environment:
+      # DB2 Connection Settings
+      - DB2_HOST=${DB2_HOST:-localhost}
+      - DB2_PORT=${DB2_PORT:-50000}
+      - DB2_DATABASE=${DB2_DATABASE:-testdb}
+      - DB2_USERNAME=${DB2_USERNAME:-db2inst1}
+      - DB2_PASSWORD=${DB2_PASSWORD:-db2inst1}
+
+      # Timeout Settings to prevent 504 gateway errors
+      - DB2_CONNECT_TIMEOUT=${DB2_CONNECT_TIMEOUT:-30}
+      - DB2_QUERY_TIMEOUT=${DB2_QUERY_TIMEOUT:-60}
+
+      # Connection Pool Settings
+      - DB2_POOL_SIZE=${DB2_POOL_SIZE:-5}
+      - DB2_MAX_OVERFLOW=${DB2_MAX_OVERFLOW:-10}
+      - DB2_POOL_RECYCLE=${DB2_POOL_RECYCLE:-3600}
+      - DB2_POOL_PRE_PING=${DB2_POOL_PRE_PING:-true}
+    volumes:
+      # Mount application code for development
+      - .:/app
+      # Optional: Mount logs directory
+      - ./logs:/app/logs
+    ports:
+      - "3030:3030"
+    working_dir: /app
+    command: python app.py
+    # For interactive mode, uncomment below and comment command above:
+    # stdin_open: true
+    # tty: true
+    # command: bash
+    restart: unless-stopped
+    networks:
+      - db2-network
+    # Uncomment if your DB2 server is on the host machine
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # Optional: Add DB2 database service if needed for local development
+  # db2-server:
+  #   image: ibmcom/db2:11.5.8.0
+  #   container_name: db2-server
+  #   privileged: true
+  #   environment:
+  #     - LICENSE=accept
+  #     - DB2INST1_PASSWORD=password
+  #     - DBNAME=sample
+  #   ports:
+  #     - "50000:50000"
+  #   volumes:
+  #     - db2-data:/database
+  #   networks:
+  #     - db2-network
+
+networks:
+  db2-network:
+    driver: bridge
+
+volumes:
+  db2-data:

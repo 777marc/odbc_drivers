@@ -25,7 +25,7 @@ def validate_odbc():
     
     # Check if driver files exist
     print("\n2. Checking driver files:")
-    driver_path = f"{ibm_db_home}/lib/libdb2o.so"
+    driver_path = f"{ibm_db_home}/lib/libdb2.so"
     if os.path.exists(driver_path):
         print(f"   ✓ Driver found: {driver_path}")
     else:
